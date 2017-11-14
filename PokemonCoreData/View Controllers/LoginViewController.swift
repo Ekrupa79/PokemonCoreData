@@ -11,9 +11,12 @@ import Firebase
 import SwiftKeychainWrapper
 import LocalAuthentication
 
-//Test user in Firebase
+//Test users in Firebase
 //Username: ashk@kanto.pk
 //Password: ilovepokemon69
+
+//Username: test@test.com
+//Password: testtest1
 
 class LoginViewController: UIViewController {
     @IBOutlet weak var userTextField:UITextField!
@@ -25,6 +28,11 @@ class LoginViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.userTextField.delegate = self
         self.passTextField.delegate = self
+        
+        //For testing users
+        passTextField.becomeFirstResponder()
+        passTextField.text = "ilovepokemon69"
+        //passTextField.text = "testtest1"
         
         userTextField.layer.borderWidth = 0.8
         userTextField.layer.borderColor = UIColor.black.cgColor
@@ -134,6 +142,7 @@ extension TextFieldDelegate:UITextFieldDelegate{
         let alertAction = UIAlertAction(title: "OK", style: .default){
             (alert: UIAlertAction) in
             //Push to next view
+            Constants.kUser = UserDefaults.standard.object(forKey: Constants.kUserNameKey) as? String
             self.performSegue(withIdentifier: "ToTabs", sender: self)
         }
         alert.addAction(alertAction)

@@ -14,5 +14,6 @@ class Constants{
     static let kPokeAPIBase = "https://pokeapi.co/api/v2/"
     static let kPokemonLimit = "15"
     static let kPokemonImageBase = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+    static var kUser:String?
 }
 

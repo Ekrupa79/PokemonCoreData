@@ -11,6 +11,7 @@ import CoreData
 
 class FavoritesTableViewController: UITableViewController {
     @IBOutlet weak var favTableView:UITableView!
+    @IBOutlet weak var reloadBtn:UIBarButtonItem!
 
     var favorites:[NSManagedObject]?
     var sendURL:String?
@@ -38,6 +39,10 @@ class FavoritesTableViewController: UITableViewController {
         
         let sortDesc = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [sortDesc]
+        
+        guard let user = Constants.kUser else {return}
+        request.predicate = NSPredicate(format: "%K == %@", "key", user)
+        
         do{
             favorites = try managedContext.fetch(request)
             favTableView.reloadData()
@@ -45,6 +50,10 @@ class FavoritesTableViewController: UITableViewController {
             print(error.localizedDescription)
         }
         UIViewController.removeSpinner(spinner: sv)
+    }
+    
+    @IBAction func reloadView(){
+        self.getFavorites()
     }
 
     // MARK: - Table view data source

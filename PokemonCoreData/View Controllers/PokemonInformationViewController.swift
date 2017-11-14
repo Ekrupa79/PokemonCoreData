@@ -59,6 +59,9 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let managedContext = appDelegate.persistentContainer.viewContext
         let request = NSFetchRequest<NSManagedObject>(entityName:"PKMNEntity")
+        //let tempPred = NSPredicate(format: "key === \(String(describing: Constants.kUser))")
+        guard let user = Constants.kUser else {return false}
+        request.predicate = NSPredicate(format: "%K == %@", "key", user)
         
         do{
             favorites = try managedContext.fetch(request)
@@ -82,6 +85,7 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
         
         guard let favEntity = NSEntityDescription.entity(forEntityName: "PKMNEntity", in: managedContext) else {return}
         let favorite = NSManagedObject(entity: favEntity, insertInto: managedContext)
+        favorite.setValue(Constants.kUser, forKey: "key")
         favorite.setValue(fav.name, forKey: "name")
         favorite.setValue(fav.url, forKey: "url")
         
@@ -116,6 +120,8 @@ extension PokemonInformationSetup{
         guard let imageId = pokemon.id else {return}
         pokemonImage.imageFrom(url: Constants.kPokemonImageBase+String(imageId)+".png")
         
+        
+        print("\(pokemon.name?.capitalizeFirstLetter() ?? "") Complete")
         //fatalError("Pokemon doesn't know how to move! Such a shame to put them down.")
         //Set up information for GeneralScrollView and StatScrollView
     }
