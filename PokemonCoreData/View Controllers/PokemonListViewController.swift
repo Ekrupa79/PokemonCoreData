@@ -13,10 +13,8 @@ class PokemonListViewController: UIViewController, UICollectionViewDelegate, UIC
     
     var testValues:[Pokemon] = []
     var tempTest:[AllPokemon] = []
-    
     var sendPokemon:Pokemon?
     var sendURL:String?
-    
     var allPokemon:[Pokemon] = [Pokemon]()
     
     override func viewDidLoad() {
@@ -41,7 +39,6 @@ class PokemonListViewController: UIViewController, UICollectionViewDelegate, UIC
         
         //Cell setup
         self.setupCellSize()
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -72,7 +69,6 @@ extension PokemonCollectionViewSetup:UICollectionViewDelegateFlowLayout{
         cell.layer.cornerRadius = 10
         cell.layer.borderColor = UIColor.black.cgColor
         cell.layer.borderWidth = 2
-        
         cell.pokeImage.imageFrom(url: Constants.kPokemonImageBase+"\(indexPath.row+1).png")
         
         return cell
@@ -102,7 +98,6 @@ extension SegueSetup{
         
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //self.sendPokemon = tempTest[indexPath.row]
         guard let url = tempTest[indexPath.row].url else {return}
         self.sendURL = url
         performSegue(withIdentifier: "ShowPokemonInfo", sender: nil)

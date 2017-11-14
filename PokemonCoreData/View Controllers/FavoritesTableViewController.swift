@@ -39,7 +39,6 @@ class FavoritesTableViewController: UITableViewController {
         let sortDesc = NSSortDescriptor(key: "name", ascending: true)
         request.sortDescriptors = [sortDesc]
         do{
-            
             favorites = try managedContext.fetch(request)
             favTableView.reloadData()
         }catch let error{
@@ -83,6 +82,7 @@ class FavoritesTableViewController: UITableViewController {
         vc.recievedURL = self.sendURL
         super.prepare(for: segue, sender: sender)
     }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let url = favorites?[indexPath.row].value(forKey: "url") as? String else {return}
         self.sendURL = url
