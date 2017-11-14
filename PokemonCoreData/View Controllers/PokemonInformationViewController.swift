@@ -41,7 +41,7 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
         JSONCalls.getPokemon(from: url) { (pokemon, error) in
             guard let pokemon = pokemon else {return}
             UIViewController.removeSpinner(spinner: sv)
-            
+            self.displayPokemon = pokemon
             DispatchQueue.main.async {
                 self.pokemonSetup(pokemon: pokemon)
                 guard self.checkForFavorite() else {return}
@@ -119,9 +119,11 @@ extension PokemonInformationSetup{
         nameOfPokemonLbl.text = pokemon.name?.capitalizeFirstLetter()
         guard let imageId = pokemon.id else {return}
         pokemonImage.imageFrom(url: Constants.kPokemonImageBase+String(imageId)+".png")
-        
-        
-        print(pokemon.moves?.count)
+        guard let weight = pokemon.weight else {return}
+        guard let height = pokemon.height else {return}
+        move1Lbl.text = "Weight: \(weight)"
+        move2Lbl.text = "Height: \(height)"
+        //Not getting data back from Dictionary types (Types, Moves, Abilities...)
         
         print("\(pokemon.name?.capitalizeFirstLetter() ?? "") Complete")
         //fatalError("Pokemon doesn't know how to move! Such a shame to put them down.")
