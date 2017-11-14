@@ -8,6 +8,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="ArialBold.ttf">
+            <string>Arial-BoldMT</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -63,12 +68,12 @@
                     <connections>
                         <outlet property="passTextField" destination="R9K-AG-aqh" id="yy3-JS-rAz"/>
                         <outlet property="userTextField" destination="ZMP-aq-vMf" id="5vh-tj-0fC"/>
-                        <segue destination="0Kd-4f-Pia" kind="show" identifier="ToPokemonMain" id="Inm-Kg-dFz"/>
+                        <segue destination="5Ff-dA-sMe" kind="show" identifier="ToTabs" id="Yhn-bg-CPo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+            <point key="canvasLocation" x="-980" y="134"/>
         </scene>
         <!--Pokemon List View Controller-->
         <scene sceneID="fcI-SF-DyK">
@@ -79,7 +84,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="zbC-UO-ylk">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" red="0.81758534908294678" green="0.086230643093585968" blue="0.04933890700340271" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wBw-mQ-AeE">
                                     <size key="itemSize" width="50" height="50"/>
@@ -128,6 +133,49 @@
             </objects>
             <point key="canvasLocation" x="1988" y="133.5832083958021"/>
         </scene>
+        <!--Favorites Table View Controller-->
+        <scene sceneID="jZz-da-vdc">
+            <objects>
+                <tableViewController id="yne-PB-h7m" customClass="FavoritesTableViewController" customModule="PokemonCoreData" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="cPS-d5-Is7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" alpha="0.75" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavCell" textLabel="4qI-mG-U07" style="IBUITableViewCellStyleDefault" id="U41-Kr-xFX">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="U41-Kr-xFX" id="lum-Ia-RZ7">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4qI-mG-U07">
+                                            <rect key="frame" x="16" y="0.0" width="344" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="0.81758534910000003" green="0.086230643090000003" blue="0.049338907000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="yne-PB-h7m" id="ctD-F8-Z0R"/>
+                            <outlet property="delegate" destination="yne-PB-h7m" id="bFz-gO-wx9"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="AEZ-fb-OYf"/>
+                    <connections>
+                        <outlet property="favTableView" destination="cPS-d5-Is7" id="1KN-Wf-Fr0"/>
+                        <segue destination="uGQ-zR-ecD" kind="show" identifier="FromFavorites" id="Vta-JQ-uX9"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XR7-3k-HDN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1988" y="865.81709145427294"/>
+        </scene>
         <!--Pokemon Information View Controller-->
         <scene sceneID="tAv-mh-rao">
             <objects>
@@ -136,10 +184,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8w-52-ZX9">
-                                <rect key="frame" x="16" y="72" width="135" height="45"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8w-52-ZX9">
+                                <rect key="frame" x="16" y="72" width="265" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="29"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -187,11 +235,20 @@
                                 <rect key="frame" x="193" y="410" width="166" height="237"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6TQ-f8-QrI">
+                                <rect key="frame" x="319" y="74" width="40" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="0" image="fav_before"/>
+                                <connections>
+                                    <action selector="favoriteToggle" destination="uGQ-zR-ecD" eventType="touchUpInside" id="Ofz-XC-g7G"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.81390374898910522" green="0.91645389795303345" blue="0.91344964504241943" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="JFA-D9-X8U"/>
                     </view>
                     <connections>
+                        <outlet property="favBtn" destination="6TQ-f8-QrI" id="Ec1-XJ-ld9"/>
                         <outlet property="generalScrollView" destination="alF-3J-oxZ" id="aDI-us-iKg"/>
                         <outlet property="move1Lbl" destination="eHd-Jz-R8Y" id="wo7-Jh-tnU"/>
                         <outlet property="move2Lbl" destination="oMW-ph-eP1" id="n55-tK-uJF"/>
@@ -204,12 +261,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7bt-ea-DRP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2970" y="134"/>
+            <point key="canvasLocation" x="2968.8000000000002" y="133.5832083958021"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Pokémon-->
         <scene sceneID="SVF-u5-hVt">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0Kd-4f-Pia" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Pokémon" image="char" id="8yv-LN-VRn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Mce-FJ-JaS">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -224,13 +282,56 @@
             </objects>
             <point key="canvasLocation" x="1162" y="134"/>
         </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="fRr-mr-NCn">
+            <objects>
+                <tabBarController id="5Ff-dA-sMe" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Dr3-V0-P9a">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="0Kd-4f-Pia" kind="relationship" relationship="viewControllers" id="NDv-RO-fcd"/>
+                        <segue destination="bco-Po-qH8" kind="relationship" relationship="viewControllers" id="WEC-Ae-WhL"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hNh-le-thl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="79" y="134"/>
+        </scene>
+        <!--Favorites-->
+        <scene sceneID="GVs-Lo-uaX">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bco-Po-qH8" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Favorites" image="pikafav" id="LOZ-gs-JnW"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YOb-t7-q8g">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="yne-PB-h7m" kind="relationship" relationship="rootViewController" id="z6T-AC-38t"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gJm-6o-v4n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1161" y="866"/>
+        </scene>
     </scenes>
     <resources>
         <image name="blankfuzzy" width="46" height="46"/>
         <image name="bulbasaur" width="250" height="250"/>
+        <image name="char" width="40" height="40"/>
         <image name="charmander" width="250" height="250"/>
+        <image name="fav_before" width="256" height="256"/>
+        <image name="pikafav" width="40" height="40"/>
         <image name="pokedex" width="377" height="118"/>
         <image name="pokedex_background" width="1024" height="2057"/>
         <image name="squirtle" width="250" height="250"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Vta-JQ-uX9"/>
+    </inferredMetricsTieBreakers>
 </document>

@@ -35,10 +35,6 @@ class LoginViewController: UIViewController {
         passTextField.layer.cornerRadius = 5.0
         passTextField.layer.masksToBounds = true
         
-        //Easy access
-        passTextField.text = "ilovepokemon69"
-        passTextField.becomeFirstResponder()
-        
         //UserDefaults
         guard let email = UserDefaults.standard.object(forKey: Constants.kUserNameKey) as? String else {return}
         userTextField.text = email
@@ -64,9 +60,7 @@ class LoginViewController: UIViewController {
             LoginInfo.shared.user = User(email: email, uid: user.uid)
             
             //User Defaults
-            //UserDefaults.standard is empty usually
             let userDefault = UserDefaults.standard
-            //Saving Username to UserDefaults on device
             userDefault.set(email, forKey: Constants.kUserNameKey)
             
             self.allValid()
@@ -91,19 +85,14 @@ extension TextFieldDelegate:UITextFieldDelegate{
         case Email
         case Password
     }
-    //Relies on the return/continue button
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //=== checks the reference
         if textField === passTextField{
             textField.resignFirstResponder()
-            
             guard isValidEmail(email: userTextField.text ?? "") else {
-                //alert bad email
                 showAlert(alertType: AlertTypes.Email, textField: textField)
                 return false
             }
             guard isValidPassword(password: passTextField.text ?? "") else {
-                //alert bad password
                 showAlert(alertType: AlertTypes.Password, textField: textField)
                 return false
             }
@@ -145,16 +134,10 @@ extension TextFieldDelegate:UITextFieldDelegate{
         let alertAction = UIAlertAction(title: "OK", style: .default){
             (alert: UIAlertAction) in
             //Push to next view
-            self.performSegue(withIdentifier: "ToPokemonMain", sender: self)
+            self.performSegue(withIdentifier: "ToTabs", sender: self)
         }
         alert.addAction(alertAction)
         self.present(alert, animated: true, completion: nil)
     }
-    
-    //    func textFieldDidBeginEditing(_ textField: UITextField) {
-    //        textField.layer.backgroundColor = UIColor.white.cgColor
-    //        textField.text = ""
-    //    }
-    
 }
 

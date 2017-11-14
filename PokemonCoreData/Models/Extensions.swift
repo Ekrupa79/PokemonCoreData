@@ -48,3 +48,11 @@ extension UIViewController{
     }
 }
 
+extension String{
+    func capitalizeFirstLetter() -> String{
+        return prefix(1).uppercased()+dropFirst()
+    }
+    mutating func capitalizeFirstLetter(){
+        self = self.capitalizeFirstLetter()
+    }
+}

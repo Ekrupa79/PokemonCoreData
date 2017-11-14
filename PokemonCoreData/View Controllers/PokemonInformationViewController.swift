@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var nameOfPokemonLbl:UILabel!
@@ -14,13 +15,14 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var move2Lbl:UILabel!
     @IBOutlet weak var move3Lbl:UILabel!
     @IBOutlet weak var move4Lbl:UILabel!
+    @IBOutlet weak var favBtn:UIButton!
     @IBOutlet weak var generalScrollView:UIScrollView!
     @IBOutlet weak var statsScrollView:UIScrollView!
-    @IBOutlet weak var sexImage:UIImageView!
     @IBOutlet weak var pokemonImage:UIImageView!
     
     var displayPokemon:Pokemon?
-    
+    var favorites:[NSManagedObject] = []
+    var nameOfPokemon:String?
     var recievedURL:String?
     
     override func viewDidLoad() {
@@ -28,50 +30,94 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
         // Do any additional setup after loading the view.
         self.generalScrollView.delegate = self
         self.statsScrollView.delegate = self
-        pokemonImage.image = #imageLiteral(resourceName: "blankfuzzy")
-        styleSetup()
         
-        //Activity indicator...?
+        favorites = []
+        
+        pokemonImage.image = #imageLiteral(resourceName: "blankfuzzy")
+        self.styleSetup()
+        
         let sv = UIViewController.displaySpinner(onView: self.view)
         guard let url = recievedURL else {return}
-        //pokemonSetup(pokemon: url)
-        //        print("RecievedURL: \(ru)")
         JSONCalls.getPokemon(from: url) { (pokemon, error) in
             guard let pokemon = pokemon else {return}
-            //self.displayPokemon = pokemon
-            
             UIViewController.removeSpinner(spinner: sv)
+            
             DispatchQueue.main.async {
                 self.pokemonSetup(pokemon: pokemon)
+                guard self.checkForFavorite() else {return}
+                self.favBtn.setImage(UIImage(named: "fav_after"), for: .normal)
             }
         }
-        
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func checkForFavorite() -> Bool{
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSManagedObject>(entityName:"PKMNEntity")
+        
+        do{
+            favorites = try managedContext.fetch(request)
+            guard let currentPokemonName = nameOfPokemon else {return false}
+            for fav in favorites{
+                guard let favName = fav.value(forKey: "name") as? String else {return false}
+                if favName.lowercased() == currentPokemonName{
+                    return true
+                }
+            }
+            //Reload... a UIViewController?
+        }catch let error{
+            print(error.localizedDescription)
+        }
+        return false
+    }
+    
+    private func saveFavorite(fav: FavoritePokemon){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        guard let favEntity = NSEntityDescription.entity(forEntityName: "PKMNEntity", in: managedContext) else {return}
+        let favorite = NSManagedObject(entity: favEntity, insertInto: managedContext)
+        favorite.setValue(fav.name, forKey: "name")
+        favorite.setValue(fav.url, forKey: "url")
+        
+        do{
+            try managedContext.save()
+            favorites.append(favorite)
+            //Reload... a UIViewController?
+        }catch let error{
+            print(error.localizedDescription)
+        }
+    }
+    
+    @IBAction func favoriteToggle(){
+        if self.favBtn.currentTitle == "0"{
+            self.favBtn.setImage(UIImage(named: "fav_after"), for: .normal)
+            self.favBtn.setTitle("1", for: .normal)
+            guard let pokemonName = nameOfPokemonLbl.text else {return}
+            guard let recievedURL = recievedURL else {return}
+            guard let favPokemon = FavoritePokemon(name: pokemonName, url: recievedURL) else {return}
+            saveFavorite(fav: favPokemon)
+        }else{
+            self.favBtn.setImage(UIImage(named: "fav_before"), for: .normal)
+            self.favBtn.setTitle("0", for: .normal)
+        }
+    }
 }
 typealias PokemonInformationSetup = PokemonInformationViewController
 extension PokemonInformationSetup{
     private func pokemonSetup(pokemon: Pokemon){
-        print("MADE IT HERE")
-        nameOfPokemonLbl.text = pokemon.name
+        self.nameOfPokemon = pokemon.name
+        nameOfPokemonLbl.text = pokemon.name?.capitalizeFirstLetter()
         guard let imageId = pokemon.id else {return}
         pokemonImage.imageFrom(url: Constants.kPokemonImageBase+String(imageId)+".png")
         
-        print(pokemon.name ?? "Stuff")
-        
-        
-        
-        
-        
         //fatalError("Pokemon doesn't know how to move! Such a shame to put them down.")
         //Set up information for GeneralScrollView and StatScrollView
-        
     }
 }
 

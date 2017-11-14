@@ -26,40 +26,18 @@ class PokemonListViewController: UIViewController, UICollectionViewDelegate, UIC
         self.pokemonCollection.delegate = self
         self.pokemonCollection.dataSource = self
         
-        
-        
-        //Shows address, remove later
         guard let tempAdd = URL(string: Constants.kPokeAPIBase+"pokemon/?limit="+Constants.kPokemonLimit) else {return}
-        print("tempAdd: \(tempAdd)")
-        
-        //        JSONCalls.getPokemon(from: URL(string: Constants.kPokeAPIBase+"pokemon/?limit="+Constants.kPokemonLimit), completionHandler:{
-        //            (pokemon,error) in
-        //            guard let p = pokemon, error == nil else {return}
-        //            print("PokemonID: \(String(describing: p.name))")
-        //
-        //            self.allPokemon.append(p)
-        //
-        //
-        //            DispatchQueue.main.async {
-        //                self.pokemonCollection.reloadData()
-        //                print("allPokemon.count: \(self.allPokemon.count)")
-        //            }
-        //        })
-        //        print(allPokemon.count)
         
         let sv = UIViewController.displaySpinner(onView: self.view)
         JSONCalls.getAllPokemon(url: tempAdd, completion:{
             (x) in
             guard let testValues = x else {return}
-            print("TV count: \(testValues.count)")
             self.tempTest = testValues
             UIViewController.removeSpinner(spinner: sv)
             DispatchQueue.main.async {
                 self.pokemonCollection.reloadData()
             }
         })
-        
-        print("Stpuid: \(tempTest.count)")
         
         //Cell setup
         self.setupCellSize()
@@ -90,8 +68,6 @@ extension PokemonCollectionViewSetup:UICollectionViewDelegateFlowLayout{
         
         // Configure the cell
         cell.pokeImage.image = #imageLiteral(resourceName: "blankfuzzy")
-        //let pokeVal = tempTest[indexPath.row]
-        
         cell.backgroundColor = UIColor.white
         cell.layer.cornerRadius = 10
         cell.layer.borderColor = UIColor.black.cgColor
@@ -122,7 +98,6 @@ extension SegueSetup{
     //To Character Information: ShowPokemonInfo
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let pokemonVC = segue.destination as? PokemonInformationViewController else {fatalError("Uh oh! No segue means no Pokemon! Unless there is a void type Pokemon...")}
-        //pokemonVC.recievePokemon = self.sendPokemon
         pokemonVC.recievedURL = self.sendURL
         
     }
