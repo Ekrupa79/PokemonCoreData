@@ -121,6 +121,8 @@ extension PokemonInformationSetup{
         pokemonImage.imageFrom(url: Constants.kPokemonImageBase+String(imageId)+".png")
         
         
+        print(pokemon.moves?.count)
+        
         print("\(pokemon.name?.capitalizeFirstLetter() ?? "") Complete")
         //fatalError("Pokemon doesn't know how to move! Such a shame to put them down.")
         //Set up information for GeneralScrollView and StatScrollView

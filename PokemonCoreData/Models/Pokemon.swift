@@ -40,25 +40,25 @@ struct Pokemon{
         do{
             let json = try JSONSerialization.jsonObject(with: data) as? [String:Any]
             guard
-                let id = json?["id"] as? Int,
-                let name = json?["name"] as? String,
-                let base_experience = json?["base_experience"] as? Int,
-                let height = json?["height"] as? Int,
-                let is_default = json?["is_default"] as? Bool,
-                let order = json?["order"] as? Int,
-                let weight = json?["weight"] as? Int,
-                let abilities = json?["abilities"] as? [[String:Any]],
-                let forms = json?["forms"] as? [[String:Any]],
-                let game_indices = json?["game_indices"] as? [[String:Any]],
-                let held_items = json?["held_items"] as? [[String:Any]],
-                let location_area_encounters = json?["location_area_encounters"] as? String,
-                //Look at location_area_enounters
-                let moves = json?["moves"] as? [[String:Any]],
-                //Sprites and Species comes back with No Data
-                let sprites = json?["sprites"] as? [String:Any],
-                let species = json?["species"] as? [String:Any],
-                let stats = json?["stats"] as? [[String:Any]],
-                let types = json?["types"] as? [[String:Any]]
+            let id = json?["id"] as? Int,
+            let name = json?["name"] as? String,
+            let base_experience = json?["base_experience"] as? Int,
+            let height = json?["height"] as? Int,
+            let is_default = json?["is_default"] as? Bool,
+            let order = json?["order"] as? Int,
+            let weight = json?["weight"] as? Int,
+            let abilities = json?["abilities"] as? [[String:Any]],
+            let forms = json?["forms"] as? [[String:Any]],
+            let game_indices = json?["game_indices"] as? [[String:Any]],
+            let held_items = json?["held_items"] as? [[String:Any]],
+            let location_area_encounters = json?["location_area_encounters"] as? String,
+            //Look at location_area_enounters
+            let moves = json?["moves"] as? [[String:Any]],
+            //Sprites and Species comes back with No Data
+            let sprites = json?["sprites"] as? [String:Any],
+            let species = json?["species"] as? [String:Any],
+            let stats = json?["stats"] as? [[String:Any]],
+            let types = json?["types"] as? [[String:Any]]
                 else {return nil}
             
             //Custom types without NamedAPIResource need a struct
@@ -91,8 +91,8 @@ struct NamedAPIResource{
     
     init?(dict: [String:Any]){
         guard
-            let name = dict["name"] as? String,
-            let url = dict["url"] as? String
+        let name = dict["name"] as? String,
+        let url = dict["url"] as? String
             else {return nil}
         
         self.name = name;
@@ -106,9 +106,9 @@ struct PokemonAbility{
     
     init?(dict: [String:Any]){
         guard
-            let is_hidden = dict["is_hidden"] as? Bool,
-            let slot = dict["slot"] as? Int,
-            let ability = dict["ability"] as? NamedAPIResource
+        let is_hidden = dict["is_hidden"] as? Bool,
+        let slot = dict["slot"] as? Int,
+        let ability = dict["ability"] as? NamedAPIResource
             else {return nil}
         
         self.is_hidden = is_hidden
@@ -122,8 +122,8 @@ struct VersionGameIndex{
     
     init?(dict: [String:Any]){
         guard
-            let game_index = dict["game_index"] as? Int,
-            let version = dict["version"] as? NamedAPIResource
+        let game_index = dict["game_index"] as? Int,
+        let version = dict["version"] as? NamedAPIResource
             else {return nil}
         
         self.game_index = game_index
@@ -136,8 +136,8 @@ struct PokemonHeldItem{
     
     init?(dict: [String:Any]){
         guard
-            let item = dict["item"] as? NamedAPIResource,
-            let version_details = dict["version_details"] as? [[String:Any]]
+        let item = dict["item"] as? NamedAPIResource,
+        let version_details = dict["version_details"] as? [[String:Any]]
             else {return nil}
         
         //Check later
@@ -151,8 +151,8 @@ struct PokemonHeldItemVersion{
     
     init?(dict: [String:Any]){
         guard
-            let version = dict["version"] as? NamedAPIResource,
-            let rarity = dict["rarity"] as? Int
+        let version = dict["version"] as? NamedAPIResource,
+        let rarity = dict["rarity"] as? Int
             else {return nil}
         
         self.version = version
@@ -165,8 +165,8 @@ struct PokemonMove{
     
     init?(dict: [String:Any]){
         guard
-            let move = dict["move"] as? NamedAPIResource,
-            let version_group_details = dict["version_group_details"] as? [[String:Any]]
+        let move = dict["move"] as? NamedAPIResource,
+        let version_group_details = dict["version_group_details"] as? [[String:Any]]
             else {return nil}
         
         self.move = move
@@ -180,9 +180,9 @@ struct PokemonMoveVersion{
     
     init?(dict: [String:Any]){
         guard
-            let move_learn_method = dict["move_learn_method"] as? NamedAPIResource,
-            let version_group = dict["version_group"] as? NamedAPIResource,
-            let level_learned_at = dict["level_learned_at"] as? Int
+        let move_learn_method = dict["move_learn_method"] as? NamedAPIResource,
+        let version_group = dict["version_group"] as? NamedAPIResource,
+        let level_learned_at = dict["level_learned_at"] as? Int
             else {return nil}
         
         self.move_learn_method = move_learn_method
@@ -235,9 +235,9 @@ struct PokemonStat{
     
     init?(dict: [String:Any]){
         guard
-            let stat = dict["stat"] as? NamedAPIResource,
-            let effort = dict["effort"] as? Int,
-            let base_stat = dict["base_stat"] as? Int
+        let stat = dict["stat"] as? NamedAPIResource,
+        let effort = dict["effort"] as? Int,
+        let base_stat = dict["base_stat"] as? Int
             else {return nil}
         
         self.stat = stat
@@ -251,8 +251,8 @@ struct PokemonType{
     
     init?(dict: [String:Any]){
         guard
-            let slot = dict["slot"] as? Int,
-            let type = dict["type"] as? NamedAPIResource
+        let slot = dict["slot"] as? Int,
+        let type = dict["type"] as? NamedAPIResource
             else {return nil}
         
         self.slot = slot
