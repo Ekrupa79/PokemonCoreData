@@ -29,11 +29,6 @@ class LoginViewController: UIViewController {
         self.userTextField.delegate = self
         self.passTextField.delegate = self
         
-        //For testing users
-        passTextField.becomeFirstResponder()
-        passTextField.text = "ilovepokemon69"
-        //passTextField.text = "testtest1"
-        
         userTextField.layer.borderWidth = 0.8
         userTextField.layer.borderColor = UIColor.black.cgColor
         userTextField.layer.cornerRadius = 5.0
