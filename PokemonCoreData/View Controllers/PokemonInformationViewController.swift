@@ -39,7 +39,7 @@ class PokemonInformationViewController: UIViewController {
         // Do any additional setup after loading the view.
         favorites = []
         
-        //self.toggleElements()
+        self.toggleElements()
         
         pokemonImage.image = #imageLiteral(resourceName: "blankfuzzy")
         self.styleSetup()
@@ -56,10 +56,6 @@ class PokemonInformationViewController: UIViewController {
                 self.favBtn.setImage(UIImage(named: "fav_after"), for: .normal)
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.toggleElements()
     }
     
     override func didReceiveMemoryWarning() {
@@ -110,28 +106,31 @@ class PokemonInformationViewController: UIViewController {
         }
     }
     
-//    private func removeFavorite(fav: NSManagedObject){
-//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//        let managedContext = appDelegate.persistentContainer.viewContext
-//        
-//        do{
-//            try managedContext.delete(fav)
-//        }catch let error{
-//            print(error.localizedDescription)
-//        }
-//    }
+    private func removeFavorite(fav: FavoritePokemon){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
+        guard let favEntity = NSEntityDescription.entity(forEntityName: "PKMNEntity", in: managedContext) else {return}
+        let favorite = NSManagedObject(entity: favEntity, insertInto: managedContext)
+        favorite.setValue(Constants.kUser, forKey: "key")
+        favorite.setValue(fav.name, forKey: "name")
+        favorite.setValue(fav.url, forKey: "url")
+        
+        print("Trying to delete...")
+        managedContext.delete(favorite)
+    }
     
     @IBAction func favoriteToggle(){
+        guard let pokemonName = nameOfPokemonLbl.text else {return}
+        guard let recievedURL = recievedURL else {return}
+        guard let favPokemon = FavoritePokemon(name: pokemonName, url: recievedURL) else {return}
         if self.favBtn.currentTitle == "0"{
             self.favBtn.setImage(UIImage(named: "fav_after"), for: .normal)
             self.favBtn.setTitle("1", for: .normal)
-            guard let pokemonName = nameOfPokemonLbl.text else {return}
-            guard let recievedURL = recievedURL else {return}
-            guard let favPokemon = FavoritePokemon(name: pokemonName, url: recievedURL) else {return}
             saveFavorite(fav: favPokemon)
         }else{
             self.favBtn.setImage(UIImage(named: "fav_before"), for: .normal)
             self.favBtn.setTitle("0", for: .normal)
+            //removeFavorite(fav: favPokemon)
         }
     }
     @IBAction func filterForType(_ sender:AnyObject){
