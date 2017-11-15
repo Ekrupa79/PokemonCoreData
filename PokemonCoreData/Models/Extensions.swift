@@ -30,7 +30,7 @@ extension UIImageView{
 extension UIViewController{
     class func displaySpinner(onView: UIView) -> UIView{
         let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.7)
+        spinnerView.backgroundColor = UIColor.init(red: 192/255, green: 48/255, blue: 40/255, alpha: 0.7)
         let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
         ai.startAnimating()
         ai.center = spinnerView.center
@@ -47,7 +47,6 @@ extension UIViewController{
         }
     }
 }
-
 extension String{
     func capitalizeFirstLetter() -> String{
         return prefix(1).uppercased()+dropFirst()

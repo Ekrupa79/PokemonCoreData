@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class FavoritesTableViewController: UITableViewController {
+class FavoritesTableViewController: UITableViewController, UITabBarControllerDelegate {
     @IBOutlet weak var favTableView:UITableView!
     @IBOutlet weak var reloadBtn:UIBarButtonItem!
 
@@ -21,6 +21,11 @@ class FavoritesTableViewController: UITableViewController {
         
         self.favTableView.delegate = self
         self.favTableView.dataSource = self
+        
+        let bgImg = UIImageView()
+        bgImg.image = #imageLiteral(resourceName: "pokedex_background")
+        bgImg.contentMode = .scaleToFill
+        self.favTableView?.backgroundView = bgImg
         
         self.favTableView.reloadData()
         self.getFavorites()

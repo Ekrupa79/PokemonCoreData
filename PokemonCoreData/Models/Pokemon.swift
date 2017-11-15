@@ -85,20 +85,6 @@ struct Pokemon{
         
     }
 }
-struct NamedAPIResource{
-    var name:String?
-    var url:String?
-    
-    init?(dict: [String:Any]){
-        guard
-        let name = dict["name"] as? String,
-        let url = dict["url"] as? String
-            else {return nil}
-        
-        self.name = name;
-        self.url = url
-    }
-}
 struct PokemonAbility{
     var is_hidden:Bool?
     var slot:Int?
@@ -108,12 +94,12 @@ struct PokemonAbility{
         guard
         let is_hidden = dict["is_hidden"] as? Bool,
         let slot = dict["slot"] as? Int,
-        let ability = dict["ability"] as? NamedAPIResource
+        let ability = dict["ability"] as? [String:Any]
             else {return nil}
         
         self.is_hidden = is_hidden
         self.slot = slot
-        self.ability = ability
+        self.ability = NamedAPIResource(dict: ability)
     }
 }
 struct VersionGameIndex{
@@ -123,11 +109,11 @@ struct VersionGameIndex{
     init?(dict: [String:Any]){
         guard
         let game_index = dict["game_index"] as? Int,
-        let version = dict["version"] as? NamedAPIResource
+        let version = dict["version"] as? [String:Any]
             else {return nil}
         
         self.game_index = game_index
-        self.version = version
+        self.version = NamedAPIResource(dict: version)
     }
 }
 struct PokemonHeldItem{
@@ -136,12 +122,12 @@ struct PokemonHeldItem{
     
     init?(dict: [String:Any]){
         guard
-        let item = dict["item"] as? NamedAPIResource,
+        let item = dict["item"] as? [String:Any],
         let version_details = dict["version_details"] as? [[String:Any]]
             else {return nil}
         
         //Check later
-        self.item = item
+        self.item = NamedAPIResource(dict: item)
         self.version_details = version_details.flatMap{PokemonHeldItemVersion(dict: $0)}
     }
 }
@@ -151,11 +137,11 @@ struct PokemonHeldItemVersion{
     
     init?(dict: [String:Any]){
         guard
-        let version = dict["version"] as? NamedAPIResource,
+        let version = dict["version"] as? [String:Any],
         let rarity = dict["rarity"] as? Int
             else {return nil}
         
-        self.version = version
+        self.version = NamedAPIResource(dict: version)
         self.rarity = rarity
     }
 }
@@ -165,11 +151,11 @@ struct PokemonMove{
     
     init?(dict: [String:Any]){
         guard
-        let move = dict["move"] as? NamedAPIResource,
+        let move = dict["move"] as? [String:Any],
         let version_group_details = dict["version_group_details"] as? [[String:Any]]
             else {return nil}
         
-        self.move = move
+        self.move = NamedAPIResource(dict: move)
         self.version_group_details = version_group_details.flatMap{PokemonMoveVersion(dict: $0)}
     }
 }
@@ -180,13 +166,13 @@ struct PokemonMoveVersion{
     
     init?(dict: [String:Any]){
         guard
-        let move_learn_method = dict["move_learn_method"] as? NamedAPIResource,
-        let version_group = dict["version_group"] as? NamedAPIResource,
+        let move_learn_method = dict["move_learn_method"] as? [String:Any],
+        let version_group = dict["version_group"] as? [String:Any],
         let level_learned_at = dict["level_learned_at"] as? Int
             else {return nil}
         
-        self.move_learn_method = move_learn_method
-        self.version_group = version_group
+        self.move_learn_method = NamedAPIResource(dict: move_learn_method)
+        self.version_group = NamedAPIResource(dict: version_group)
         self.level_learned_at = level_learned_at
     }
 }
@@ -200,7 +186,6 @@ struct PokemonSprites{
     var back_female:String?
     var back_shiny_female:String?
     
-    //init?(front_default:String?, front_shiny:String?, front_female:String?, front_shiny_female:String?, back_default:String?, back_shiny:String?, back_female:String?, back_shiny_female:String?){
     init?(arr: [String:Any]){
         if let front_default = arr["front_default"] as? String{
             self.front_default = front_default
@@ -235,12 +220,12 @@ struct PokemonStat{
     
     init?(dict: [String:Any]){
         guard
-        let stat = dict["stat"] as? NamedAPIResource,
+        let stat = dict["stat"] as? [String:Any],
         let effort = dict["effort"] as? Int,
         let base_stat = dict["base_stat"] as? Int
             else {return nil}
         
-        self.stat = stat
+        self.stat = NamedAPIResource(dict: stat)
         self.effort = effort
         self.base_stat = base_stat
     }
@@ -252,11 +237,25 @@ struct PokemonType{
     init?(dict: [String:Any]){
         guard
         let slot = dict["slot"] as? Int,
-        let type = dict["type"] as? NamedAPIResource
+        let type = dict["type"] as? [String:Any]
             else {return nil}
         
         self.slot = slot
-        self.type = type
+        self.type = NamedAPIResource(dict: type)
+    }
+}
+struct NamedAPIResource{
+    var name:String?
+    var url:String?
+    
+    init?(dict: [String:Any]){
+        guard
+            let name = dict["name"] as? String,
+            let url = dict["url"] as? String
+            else {return nil}
+        
+        self.name = name
+        self.url = url
     }
 }
 struct FavoritePokemon{

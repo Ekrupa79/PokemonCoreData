@@ -23,7 +23,7 @@ class PokemonListViewController: UIViewController, UICollectionViewDelegate, UIC
         // Do any additional setup after loading the view.
         self.pokemonCollection.delegate = self
         self.pokemonCollection.dataSource = self
-        print(Constants.kUser ?? "")
+        
         guard let tempAdd = URL(string: Constants.kPokeAPIBase+"pokemon/?limit="+Constants.kPokemonLimit) else {return}
         
         let sv = UIViewController.displaySpinner(onView: self.view)

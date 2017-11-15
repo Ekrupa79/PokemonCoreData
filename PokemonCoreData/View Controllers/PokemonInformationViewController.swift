@@ -9,15 +9,24 @@
 import UIKit
 import CoreData
 
-class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
+class PokemonInformationViewController: UIViewController {
     @IBOutlet weak var nameOfPokemonLbl:UILabel!
     @IBOutlet weak var move1Lbl:UILabel!
     @IBOutlet weak var move2Lbl:UILabel!
     @IBOutlet weak var move3Lbl:UILabel!
     @IBOutlet weak var move4Lbl:UILabel!
+    //Stats
+    @IBOutlet weak var baseExpLbl:UILabel!
+    @IBOutlet weak var hpLbl:UILabel!
+    @IBOutlet weak var speedLbl:UILabel!
+    @IBOutlet weak var atkLbl:UILabel!
+    @IBOutlet weak var spAtkLbl:UILabel!
+    @IBOutlet weak var defLbl:UILabel!
+    @IBOutlet weak var spDefLbl:UILabel!
+    
     @IBOutlet weak var favBtn:UIButton!
-    @IBOutlet weak var generalScrollView:UIScrollView!
-    @IBOutlet weak var statsScrollView:UIScrollView!
+    @IBOutlet weak var type1Btn:UIButton!
+    @IBOutlet weak var type2Btn:UIButton!
     @IBOutlet weak var pokemonImage:UIImageView!
     
     var displayPokemon:Pokemon?
@@ -28,10 +37,9 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.generalScrollView.delegate = self
-        self.statsScrollView.delegate = self
-        
         favorites = []
+        
+        //self.toggleElements()
         
         pokemonImage.image = #imageLiteral(resourceName: "blankfuzzy")
         self.styleSetup()
@@ -41,13 +49,17 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
         JSONCalls.getPokemon(from: url) { (pokemon, error) in
             guard let pokemon = pokemon else {return}
             UIViewController.removeSpinner(spinner: sv)
-            self.displayPokemon = pokemon
+
             DispatchQueue.main.async {
                 self.pokemonSetup(pokemon: pokemon)
                 guard self.checkForFavorite() else {return}
                 self.favBtn.setImage(UIImage(named: "fav_after"), for: .normal)
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.toggleElements()
     }
     
     override func didReceiveMemoryWarning() {
@@ -98,6 +110,17 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+//    private func removeFavorite(fav: NSManagedObject){
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        let managedContext = appDelegate.persistentContainer.viewContext
+//        
+//        do{
+//            try managedContext.delete(fav)
+//        }catch let error{
+//            print(error.localizedDescription)
+//        }
+//    }
+    
     @IBAction func favoriteToggle(){
         if self.favBtn.currentTitle == "0"{
             self.favBtn.setImage(UIImage(named: "fav_after"), for: .normal)
@@ -111,11 +134,17 @@ class PokemonInformationViewController: UIViewController, UIScrollViewDelegate {
             self.favBtn.setTitle("0", for: .normal)
         }
     }
+    @IBAction func filterForType(_ sender:AnyObject){
+        if let typeText = sender.title(for: .normal){
+            print(typeText)
+        }
+    }
 }
 typealias PokemonInformationSetup = PokemonInformationViewController
 extension PokemonInformationSetup{
     private func pokemonSetup(pokemon: Pokemon){
         self.nameOfPokemon = pokemon.name
+
         nameOfPokemonLbl.text = pokemon.name?.capitalizeFirstLetter()
         guard let imageId = pokemon.id else {return}
         pokemonImage.imageFrom(url: Constants.kPokemonImageBase+String(imageId)+".png")
@@ -123,11 +152,60 @@ extension PokemonInformationSetup{
         guard let height = pokemon.height else {return}
         move1Lbl.text = "Weight: \(weight)"
         move2Lbl.text = "Height: \(height)"
-        //Not getting data back from Dictionary types (Types, Moves, Abilities...)
+        
+        //Type Buttons
+        guard let types = pokemon.types else {return}
+        var count = 0
+        for pokeType in types{
+            let (red, green, blue) = TypeColors.getTypeColor(type: pokeType.type?.name ?? "")
+            if count == 0{
+                type1Btn.backgroundColor = UIColor(red: red, green: green, blue: blue, alpha: 1)
+                type1Btn.setTitle(pokeType.type?.name?.capitalizeFirstLetter(), for: .normal)
+                type1Btn.isHidden = false
+            }else if count == 1{
+                type2Btn.backgroundColor = UIColor(red: red, green: green, blue: blue, alpha: 1)
+                type2Btn.setTitle(pokeType.type?.name?.capitalizeFirstLetter(), for: .normal )
+                type2Btn.isHidden = false
+            }
+            count+=1
+        }
+        //Stats
+        guard let bExp = pokemon.base_experience else {return}
+        baseExpLbl.text = "Base Experience: \(bExp)"
+        guard let stats = pokemon.stats else {return}
+        var statArr:[String] = [String]()
+        for stat in stats{statArr.append("\(stat.base_stat ?? 0)")}
+        speedLbl.text = "Speed: \(statArr[0])"
+        spDefLbl.text = "Sp. Def: \(statArr[1])"
+        spAtkLbl.text = "Sp. Atk: \(statArr[2])"
+        defLbl.text = "Defense: \(statArr[3])"
+        atkLbl.text = "Attack: \(statArr[4])"
+        hpLbl.text = "HP: \(statArr[5])"
+        
+        self.toggleElements()
         
         print("\(pokemon.name?.capitalizeFirstLetter() ?? "") Complete")
         //fatalError("Pokemon doesn't know how to move! Such a shame to put them down.")
         //Set up information for GeneralScrollView and StatScrollView
+    }
+    func toggleElements(){
+        nameOfPokemonLbl.isHidden = !nameOfPokemonLbl.isHidden
+        move1Lbl.isHidden = !move1Lbl.isHidden
+        move2Lbl.isHidden = !move2Lbl.isHidden
+        //Re-enable later
+        //move3Lbl.isHidden = !move3Lbl.isHidden
+        //move4Lbl.isHidden = !move4Lbl.isHidden
+        baseExpLbl.isHidden = !baseExpLbl.isHidden
+        hpLbl.isHidden = !hpLbl.isHidden
+        speedLbl.isHidden = !speedLbl.isHidden
+        atkLbl.isHidden = !atkLbl.isHidden
+        spAtkLbl.isHidden = !spAtkLbl.isHidden
+        defLbl.isHidden = !defLbl.isHidden
+        spDefLbl.isHidden = !spDefLbl.isHidden
+        favBtn.isHidden = !favBtn.isHidden
+        //type1Btn.isHidden = !type1Btn.isHidden
+        //type2Btn.isHidden = !type2Btn.isHidden
+        pokemonImage.isHidden = !pokemonImage.isHidden
     }
 }
 
@@ -142,22 +220,30 @@ extension PokemonInfoStyleSetup{
         move1Lbl.layer.masksToBounds = true
         move1Lbl.layer.cornerRadius = 25
         move1Lbl.layer.borderColor = UIColor.black.cgColor
-        move1Lbl.layer.borderWidth = 2
+        move1Lbl.layer.borderWidth = 1.0
         
         move2Lbl.layer.masksToBounds = true
         move2Lbl.layer.cornerRadius = 25
         move2Lbl.layer.borderColor = UIColor.black.cgColor
-        move2Lbl.layer.borderWidth = 2
+        move2Lbl.layer.borderWidth = 1.0
         
         move3Lbl.layer.masksToBounds = true
         move3Lbl.layer.cornerRadius = 25
         move3Lbl.layer.borderColor = UIColor.black.cgColor
-        move3Lbl.layer.borderWidth = 2
+        move3Lbl.layer.borderWidth = 1.0
         
         move4Lbl.layer.masksToBounds = true
         move4Lbl.layer.cornerRadius = 25
         move4Lbl.layer.borderColor = UIColor.black.cgColor
-        move4Lbl.layer.borderWidth = 2
+        move4Lbl.layer.borderWidth = 1.0
+        
+        type1Btn.layer.cornerRadius = 20
+        type1Btn.layer.borderColor = UIColor.black.cgColor
+        type1Btn.layer.borderWidth = 1.0
+        
+        type2Btn.layer.cornerRadius = 20
+        type2Btn.layer.borderColor = UIColor.black.cgColor
+        type2Btn.layer.borderWidth = 1.0
     }
 }
 
